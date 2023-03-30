@@ -2,7 +2,7 @@
  * @Description:
  * @Author: FuHang
  * @Date: 2023-03-30 09:42:27
- * @LastEditTime: 2023-03-30 16:47:44
+ * @LastEditTime: 2023-03-31 01:16:11
  * @LastEditors: Please set LastEditors
  * @FilePath: \nest-service\src\modules\user\user.service.ts
  */
@@ -27,6 +27,14 @@ export class UserService {
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
     return this.prismaService.user.create({
       data,
+    });
+  }
+
+  async findOne(username: string | null): Promise<User | undefined> {
+    return this.prismaService.user.findUnique({
+      where: {
+        username,
+      },
     });
   }
 

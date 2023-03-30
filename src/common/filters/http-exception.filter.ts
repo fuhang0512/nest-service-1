@@ -2,7 +2,7 @@
  * @Description:
  * @Author: FuHang
  * @Date: 2022-09-26 23:04:51
- * @LastEditTime: 2023-03-30 16:53:00
+ * @LastEditTime: 2023-03-31 01:32:08
  * @LastEditors: Please set LastEditors
  * @FilePath: \nest-service\src\common\filters\http-exception.filter.ts
  */
@@ -37,9 +37,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
       ? exception.message
       : `${status >= 500 ? 'Service Error' : 'Client Error'}`;
     const errorResponse = {
-      data: {},
-      message: status == 401 ? '请重新登陆' : message,
+      data: null,
+      message: status == 401 ? 'token过期，请重新登录' : message,
       code: status == 401 ? 401 : -1,
+      success: false,
+      timestamp: new Date().toISOString(),
+      path: request.url,
     };
 
     // 设置返回的状态码， 请求头，发送错误信息

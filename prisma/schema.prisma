@@ -13,8 +13,9 @@ datasource db {
 // 用户表
 model User {
   id        String   @id @default(uuid())
-  email     String   @unique
-  username  String?
+  email     String?  @unique
+  username  String   @unique
+  password  String
   salt      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -32,17 +33,17 @@ model Role {
 // 日志记录表
 model Log {
   id         String   @id @default(uuid())
-  title      String
-  time       String
-  type       Int
-  user_agent String
-  url        String
-  ip         String
-  params     String
-  body       String
+  title      String?
+  time       String?
+  type       Int?
+  user_agent String?
+  url        String?
+  ip         String?
+  params     String?
+  body       String?
   create_by  String?
-  method     String
-  host       String
+  method     String?
+  host       String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
