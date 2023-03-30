@@ -16,7 +16,7 @@ export class LoggingController {
   constructor(private readonly loggingService: LoggingService) {}
 
   @Post()
-  create(@Body() createLoggingDto: CreateLoggingDto) {
+  create(@Body() createLoggingDto: any) {
     return this.loggingService.create(createLoggingDto);
   }
 

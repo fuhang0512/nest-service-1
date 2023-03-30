@@ -1,12 +1,14 @@
 /*
  * @Description:
  * @Author: FuHang
- * @Date: 2023-03-30 01:54:31
- * @LastEditTime: 2023-03-30 02:01:43
+ * @Date: 2023-03-30 09:42:27
+ * @LastEditTime: 2023-03-30 17:47:46
  * @LastEditors: Please set LastEditors
  * @FilePath: \nest-service\src\modules\logging\logging.service.ts
  */
+import { PrismaService } from '@/prisma/prisma.service';
 import { Inject, Injectable } from '@nestjs/common';
+import { Log, Prisma } from '@prisma/client';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger, LoggerOptions } from 'winston';
 import { CreateLoggingDto } from './dto/create-logging.dto';
@@ -16,10 +18,15 @@ import { UpdateLoggingDto } from './dto/update-logging.dto';
 export class LoggingService {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
+    private prismaService: PrismaService,
   ) {}
 
-  create(createLoggingDto: CreateLoggingDto) {
-    return 'This action adds a new logging';
+  async create(data: any): Promise<Log> {
+    // return 'This action adds a new logging';
+    console.log('走了这里没有');
+    return this.prismaService.log.create({
+      data,
+    });
   }
 
   // findAll() {
@@ -37,11 +44,17 @@ export class LoggingService {
   // remove(id: number) {
   //   return `This action removes a #${id} logging`;
   // }
-  log(name: string, message: any) {
-    this.logger.info(name, message);
+  async log(name: string, message: any): Promise<Log> {
+    this.logger.info(name, message.req);
+    return this.prismaService.log.create({
+      data: message.req,
+    });
   }
   error(name: string, message: any) {
-    this.logger.error(name, message);
+    this.logger.error(name, message.req);
+    return this.prismaService.log.create({
+      data: message.req,
+    });
   }
   warn(name: string, message: any) {
     this.logger.warn(name, message);

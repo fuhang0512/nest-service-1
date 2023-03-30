@@ -2,7 +2,7 @@
  * @Description:
  * @Author: FuHang
  * @Date: 2023-03-28 18:29:44
- * @LastEditTime: 2023-03-30 00:46:57
+ * @LastEditTime: 2023-03-30 16:49:55
  * @LastEditors: Please set LastEditors
  * @FilePath: \nest-service\src\main.ts
  */
@@ -14,6 +14,8 @@ import {
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { PrismaService } from './prisma/prisma.service';
+import { AnyExceptionFilter } from './common/filters/any-exception.filter';
 // import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 // import { Logger } from 'winston';
 
@@ -25,6 +27,9 @@ async function bootstrap() {
   );
   // 管道
   app.useGlobalPipes(new ValidationPipe());
+
+  const prismaService: PrismaService = app.get(PrismaService);
+  prismaService.enableShutdownHooks(app);
 
   // 设置swagger文档相关配置
   const config = new DocumentBuilder()
