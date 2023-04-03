@@ -3,7 +3,7 @@ import { AnyExceptionFilter } from './common/filters/any-exception.filter';
  * @Description:
  * @Author: FuHang
  * @Date: 2023-03-28 18:29:44
- * @LastEditTime: 2023-03-30 17:25:41
+ * @LastEditTime: 2023-04-03 10:14:43
  * @LastEditors: Please set LastEditors
  * @FilePath: \nest-service\src\app.module.ts
  */
@@ -21,11 +21,28 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { LoggingModule } from './modules/logging/logging.module';
 import { LoggingService } from './modules/logging/logging.service';
-import { PrismaModule } from './prisma/prisma.module';
-import { PrismaService } from './prisma/prisma.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+import config from './common/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [config],
+    }),
+    // 连接MySQL
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: process.env.MYSQL_HOST,
+      port: process.env.MYSQL_PORT as unknown as number,
+      username: process.env.MYSQL_USERNAME,
+      password: process.env.MYSQL_PASSWORD,
+      database: process.env.MYSQL_DATABASE,
+      synchronize: true,
+      // 自动加载实体
+      autoLoadEntities: true,
+    }),
     WinstonModule.forRoot({
       transports: [
         new winston.transports.Console({
@@ -78,12 +95,10 @@ import { PrismaService } from './prisma/prisma.service';
     AuthModule,
     UserModule,
     LoggingModule,
-    PrismaModule,
   ],
   controllers: [],
   providers: [
     LoggingService,
-    PrismaService,
     // 应用拦截器
     {
       provide: APP_INTERCEPTOR,

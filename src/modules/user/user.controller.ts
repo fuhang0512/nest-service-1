@@ -2,7 +2,7 @@
  * @Description:
  * @Author: FuHang
  * @Date: 2023-03-30 20:12:57
- * @LastEditTime: 2023-03-31 01:48:01
+ * @LastEditTime: 2023-04-03 10:15:12
  * @LastEditors: Please set LastEditors
  * @FilePath: \nest-service\src\modules\user\user.controller.ts
  */
@@ -20,28 +20,27 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User as UserModel } from '@prisma/client';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { User } from './entities/user.entity';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  getUserById(@Param('id') id: string): Promise<UserModel> {
+  getUserById(@Param('id') id: string): Promise<User> {
     return this.userService.user(id);
   }
 
   @Post()
-  async createUser(@Body() postData: any): Promise<UserModel> {
-    return this.userService.createUser(postData);
+  async createUser(@Body() userData: CreateUserDto): Promise<User> {
+    return this.userService.createUser(userData);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
     console.log('req', req);
-
     return req.user;
   }
 
