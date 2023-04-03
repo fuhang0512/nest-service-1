@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { LoggingService } from './logging.service';
 import { LoggingController } from './logging.controller';
-import { PrismaService } from '@/prisma/prisma.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Logging } from './entities/logging.entity';
 
 @Module({
+  imports: [TypeOrmModule.forFeature([Logging])],
   controllers: [LoggingController],
-  providers: [LoggingService, PrismaService],
+  providers: [LoggingService],
 })
 export class LoggingModule {}

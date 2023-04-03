@@ -2,31 +2,28 @@
  * @Description:
  * @Author: FuHang
  * @Date: 2023-03-30 09:42:27
- * @LastEditTime: 2023-03-30 17:47:46
+ * @LastEditTime: 2023-04-04 01:19:13
  * @LastEditors: Please set LastEditors
  * @FilePath: \nest-service\src\modules\logging\logging.service.ts
  */
-import { PrismaService } from '@/prisma/prisma.service';
 import { Inject, Injectable } from '@nestjs/common';
-import { Log, Prisma } from '@prisma/client';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger, LoggerOptions } from 'winston';
 import { CreateLoggingDto } from './dto/create-logging.dto';
 import { UpdateLoggingDto } from './dto/update-logging.dto';
+import { Logging } from './entities/logging.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class LoggingService {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-    private prismaService: PrismaService,
+    @InjectRepository(Logging) private repository: Repository<Logging>,
   ) {}
 
-  async create(data: any): Promise<Log> {
-    // return 'This action adds a new logging';
-    console.log('走了这里没有');
-    return this.prismaService.log.create({
-      data,
-    });
+  async create(data: any): Promise<Logging> {
+    return this.repository.save(data);
   }
 
   // findAll() {
@@ -44,15 +41,15 @@ export class LoggingService {
   // remove(id: number) {
   //   return `This action removes a #${id} logging`;
   // }
-  async log(name: string, message: any): Promise<Log> {
+  async log(name: string, message: any): Promise<Logging> {
     this.logger.info(name, message.req);
-    return this.prismaService.log.create({
+    return this.repository.save({
       data: message.req,
     });
   }
-  error(name: string, message: any) {
+  async error(name: string, message: any): Promise<Logging> {
     this.logger.error(name, message.req);
-    return this.prismaService.log.create({
+    return this.repository.save({
       data: message.req,
     });
   }

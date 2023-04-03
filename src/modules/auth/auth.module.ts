@@ -2,6 +2,14 @@
  * @Description:
  * @Author: FuHang
  * @Date: 2023-03-28 19:11:11
+ * @LastEditTime: 2023-04-04 01:17:14
+ * @LastEditors: Please set LastEditors
+ * @FilePath: \nest-service\src\modules\auth\auth.module.ts
+ */
+/*
+ * @Description:
+ * @Author: FuHang
+ * @Date: 2023-03-28 19:11:11
  * @LastEditTime: 2023-03-31 01:59:29
  * @LastEditors: Please set LastEditors
  * @FilePath: \nest-service\src\modules\auth\auth.module.ts
@@ -16,10 +24,12 @@ import { jwtConstants } from './constants';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { UserService } from '../user/user.service';
-import { PrismaService } from '@/prisma/prisma.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from '../user/entities/user.entity';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([User]),
     UserModule,
     PassportModule,
     JwtModule.register({
@@ -28,12 +38,6 @@ import { PrismaService } from '@/prisma/prisma.service';
     }),
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    LocalStrategy,
-    JwtStrategy,
-    UserService,
-    PrismaService,
-  ],
+  providers: [AuthService, LocalStrategy, JwtStrategy, UserService],
 })
 export class AuthModule {}

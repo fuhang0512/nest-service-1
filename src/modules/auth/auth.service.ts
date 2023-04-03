@@ -2,7 +2,7 @@
  * @Description:
  * @Author: FuHang
  * @Date: 2023-03-28 19:11:11
- * @LastEditTime: 2023-03-31 02:05:38
+ * @LastEditTime: 2023-04-04 01:16:45
  * @LastEditors: Please set LastEditors
  * @FilePath: \nest-service\src\modules\auth\auth.service.ts
  */
@@ -11,11 +11,13 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService,
+    @InjectRepository(User) private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
 

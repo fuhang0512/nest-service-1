@@ -2,7 +2,7 @@
  * @Description:
  * @Author: FuHang
  * @Date: 2023-03-30 09:42:27
- * @LastEditTime: 2023-04-03 10:15:10
+ * @LastEditTime: 2023-04-04 01:15:47
  * @LastEditors: Please set LastEditors
  * @FilePath: \nest-service\src\modules\user\user.service.ts
  */
@@ -11,10 +11,11 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UserService {
-  constructor(private repository: Repository<User>) {}
+  constructor(@InjectRepository(User) private repository: Repository<User>) {}
 
   async user(id: string): Promise<User | null> {
     return this.repository.findOne({
